@@ -6,7 +6,7 @@ export default createStore({
 	},
 	getters: {
 		time2(state) {
-			return state.counter * 2;
+			return state.count * 2;
 		}
 	},
 	mutations: {
@@ -15,6 +15,23 @@ export default createStore({
 		},
 		decrement(state) {
 			state.count--;
+		}
+	},
+	actions: {
+		increment: ({ commit }) => commit('increment'),
+		decrement: ({ commit }) => commit('decrement'),
+		incrementIfOdd ({ commit, state }) {
+			if ((state.count + 1) % 2 === 0) {
+				commit('increment')
+			}
+		},
+		incrementAsync ({ commit }) {
+			return new Promise((resolve) => {
+				setTimeout(() => {
+					commit('increment')
+					resolve()
+				}, 1000)	//1초 후 증가
+			})
 		}
 	}
 })
