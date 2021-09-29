@@ -22,9 +22,11 @@ export default {
 	},
 	
 	setup() {
-		const dataValues = ref([30, 40]);
+		let dataLabels = ref([]);
+		let dataValues = ref([]);
+
 		const dataCollection = computed(() => ({
-			labels: [0, 100],
+			labels: dataLabels.value,
 				datasets: [
 					{
 						label: "sample legnend",
@@ -54,12 +56,17 @@ export default {
 		});
 
 		const fillData = (fetchedData) => {
-			return ([getRandomChartValues(fetchedData), getRandomChartValues(fetchedData)]);
+			const newArray = [...dataValues.value, fetchedData]
+			return (newArray);
+			// return ([getRandomChartValues(fetchedData), getRandomChartValues(fetchedData)]);
 		};
 
 		const getRealtimeData = () => {
 			socket.on("newdata", fetchedData => {
+				console.log("dataValues: ", dataValues);
 				dataValues.value = fillData(fetchedData);
+				dataLabels.value = Array.from({length: dataValues.value.length}, (v, i) => i);
+				// dataValues = fillData(fetchedData); 
 				// console.log(lineChartRef.value.chartInstance);
 			})
 		}
